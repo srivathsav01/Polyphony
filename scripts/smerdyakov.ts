@@ -10,6 +10,9 @@ if (!belief) throw new Error("Pass a belief as the first argument");
 
 const system = await readFile(`prompts/smerdyakov/${version}.md`, "utf8");
 
+const NAMES = ["Anaya", "Tomasz", "Ines", "Kwame", "Mirela", "Joon", "Farah", "Luca", "Thandi", "Ravi", "Elif", "Mateo"];
+const pick = [...NAMES].sort(() => Math.random() - 0.5).slice(0, 3);
+
 const start = Date.now();
 const res = await client.messages.create({
   model: "claude-haiku-5-5",
@@ -17,7 +20,7 @@ const res = await client.messages.create({
   output_config: { effort: effort as "low" | "medium" | "high" },
   thinking: { type: "adaptive", display: "summarized" },
   system,
-  messages: [{ role: "user", content: belief }],
+  messages: [{ role: "user", content: `${belief}\n\n(Names you may use for people in the story: ${pick.join(", ")})` }],
 });
 
 // See every block the model returned, not just text
